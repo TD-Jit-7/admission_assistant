@@ -33,7 +33,7 @@ function App() {
 
     try {
       // Call backend API
-      const response = await axios.post('http://localhost:8000/chat', {
+      const response = await axios.post('https://admission-assistant-api.onrender.com', {
         message: input
       });
 
