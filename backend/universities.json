@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Bangladesh University of Engineering and Technology (BUET)",
+    "type": "Public",
+    "departments": ["CSE", "EEE", "ME", "CE", "IPE", "Architecture"],
+    "admission_status": "Open",
+    "minimum_gpa": 5.0,
+    "location": "Dhaka"
+  },
+  {
+    "name": "University of Dhaka (DU)",
+    "type": "Public",
+    "departments": ["CSE", "Physics", "Chemistry", "English", "BBA", "Economics"],
+    "admission_status": "Open",
+    "minimum_gpa": 4.5,
+    "location": "Dhaka"
+  },
+  {
+    "name": "Chittagong University of Engineering and Technology (CUET)",
+    "type": "Public",
+    "departments": ["CSE", "EEE", "ME", "CE"],
+    "admission_status": "Open",
+    "minimum_gpa": 4.8,
+    "location": "Chittagong"
+  },
+  {
+    "name": "BRAC University",
+    "type": "Private",
+    "departments": ["CSE", "EEE", "BBA", "English", "Architecture", "Economics"],
+    "admission_status": "Open",
+    "minimum_gpa": 3.5,
+    "location": "Dhaka"
+  },
+  {
+    "name": "North South University (NSU)",
+    "type": "Private",
+    "departments": ["CSE", "EEE", "BBA", "Economics", "English"],
+    "admission_status": "Open",
+    "minimum_gpa": 3.8,
+    "location": "Dhaka"
+  },
+  {
+    "name": "Independent University Bangladesh (IUB)",
+    "type": "Private",
+    "departments": ["CSE", "EEE", "BBA", "English", "Economics"],
+    "admission_status": "Open",
+    "minimum_gpa": 3.5,
+    "location": "Dhaka"
+  },
+  {
+    "name": "American International University-Bangladesh (AIUB)",
+    "type": "Private",
+    "departments": ["CSE", "EEE", "BBA", "English", "Civil Engineering"],
+    "admission_status": "Open",
+    "minimum_gpa": 3.0,
+    "location": "Dhaka"
+  },
+  {
+    "name": "East West University",
+    "type": "Private",
+    "departments": ["CSE", "EEE", "BBA", "English", "Economics"],
+    "admission_status": "Closed",
+    "minimum_gpa": 3.5,
+    "location": "Dhaka"
+  },
+  {
+    "name": "United International University (UIU)",
+    "type": "Private",
+    "departments": ["CSE", "EEE", "BBA", "Civil Engineering"],
+    "admission_status": "Open",
+    "minimum_gpa": 3.0,
+    "location": "Dhaka"
+  },
+  {
+    "name": "Daffodil International University (DIU)",
+    "type": "Private",
+    "departments": ["CSE", "EEE", "BBA", "English", "Civil Engineering"],
+    "admission_status": "Open",
+    "minimum_gpa": 2.5,
+    "location": "Dhaka"
+  },
+  {
+    "name": "Jahangirnagar University",
+    "type": "Public",
+    "departments": ["CSE", "Physics", "Chemistry", "English", "Economics", "BBA"],
+    "admission_status": "Open",
+    "minimum_gpa": 4.0,
+    "location": "Savar"
+  },
+  {
+    "name": "Rajshahi University of Engineering and Technology (RUET)",
+    "type": "Public",
+    "departments": ["CSE", "EEE", "ME", "CE", "IPE"],
+    "admission_status": "Open",
+    "minimum_gpa": 4.7,
+    "location": "Rajshahi"
+  },
+  {
+    "name": "Khulna University of Engineering and Technology (KUET)",
+    "type": "Public",
+    "departments": ["CSE", "EEE", "ME", "CE", "Urban Planning"],
+    "admission_status": "Open",
+    "minimum_gpa": 4.7,
+    "location": "Khulna"
+  },
+  {
+    "name": "Islamic University of Technology (IUT)",
+    "type": "Public",
+    "departments": ["CSE", "EEE", "ME", "CE"],
+    "admission_status": "Open",
+    "minimum_gpa": 4.5,
+    "location": "Gazipur"
+  },
+  {
+    "name": "Ahsanullah University of Science and Technology (AUST)",
+    "type": "Private",
+    "departments": ["CSE", "EEE", "ME", "CE", "Architecture"],
+    "admission_status": "Open",
+    "minimum_gpa": 4.0,
+    "location": "Dhaka"
+  }
+]
