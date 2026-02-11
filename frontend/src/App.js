@@ -32,27 +32,43 @@ function App() {
     setLoading(true);
 
     try {
-      // Call backend API
+      // IMPORTANT: Replace with YOUR Render backend URL
       const response = await axios.post('https://admission-assistant-api.onrender.com/chat', {
         message: input
+      }, {
+        timeout: 60000 // 60 second timeout for Render free tier spin-up
       });
 
-      // Add AI response to chat
-      const aiMessage = {
-        role: 'ai',
-        content: response.data.response
-      };
-      setMessages(prev => [...prev, aiMessage]);
+      // Check if response exists and has data
+      if (response && response.data && response.data.response) {
+        const aiMessage = {
+          role: 'ai',
+          content: response.data.response
+        };
+        setMessages(prev => [...prev, aiMessage]);
+      } else {
+        throw new Error('Invalid response from server');
+      }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error details:', error);
+      let errorMsg = '❌ Sorry, I\'m having trouble connecting to the server.';
+      
+      if (error.code === 'ECONNABORTED') {
+        errorMsg = '⏱️ Server is waking up (Render free tier). Please wait 30 seconds and try again.';
+      } else if (error.response) {
+        errorMsg = `❌ Server error: ${error.response.status}. ${error.response.data?.error || ''}`;
+      } else if (error.request) {
+        errorMsg = '❌ Cannot reach the server. Please check if the backend is deployed and running.';
+      }
+      
       const errorMessage = {
         role: 'ai',
-        content: '❌ Sorry, I\'m having trouble connecting to the server. Please make sure the backend is running.'
+        content: errorMsg
       };
       setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const handleKeyPress = (e) => {
@@ -71,7 +87,7 @@ function App() {
         </div>
 
         <div className="messages-container">
-          {messages.map((msg, index) => (
+          {messages && messages.length > 0 && messages.map((msg, index) => (
             <div key={index} className={`message ${msg.role}`}>
               <div className="message-avatar">
                 {msg.role === 'user' ? '👤' : '🤖'}
@@ -113,13 +129,13 @@ function App() {
 
         <div className="example-queries">
           <p>Try asking:</p>
-          <button onClick={() => setInput("I want to study CSE, which university should I choose?")}>
+          <button onClick={() => setInput("I want to study CSE, which university should I choose?")} disabled={loading}>
             CSE recommendations
           </button>
-          <button onClick={() => setInput("Which universities have open admissions?")}>
+          <button onClick={() => setInput("Which universities have open admissions?")} disabled={loading}>
             Open admissions
           </button>
-          <button onClick={() => setInput("My GPA is 4.5 in science, what are my options?")}>
+          <button onClick={() => setInput("My GPA is 4.5 in science, what are my options?")} disabled={loading}>
             Based on GPA
           </button>
         </div>
