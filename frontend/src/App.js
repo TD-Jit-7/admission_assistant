@@ -1,3 +1,4 @@
+import ReactMarkdown from 'react-markdown';
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './App.css';
@@ -96,7 +97,9 @@ function App() {
                 <div className="message-role">
                   {msg.role === 'user' ? 'You' : 'AI Assistant'}
                 </div>
-                <div className="message-text">{msg.content}</div>
+                <div className="message-text">
+                  <ReactMarkdown>{msg.content}</ReactMarkdown>
+                </div>
               </div>
             </div>
           ))}
