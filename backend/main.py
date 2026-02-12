@@ -25,7 +25,7 @@ app.add_middleware(
 )
 
 # Configure Google Gemini AI
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "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")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 client = Groq(api_key=GROQ_API_KEY)
 
 # Load university data from JSON file
