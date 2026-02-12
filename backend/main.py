@@ -5,8 +5,7 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from google import genai
-from google.genai import types
+from groq import Groq
 import json
 from database import get_db, Student
 
