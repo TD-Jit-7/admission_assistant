@@ -215,15 +215,22 @@ Answer the student's question based on the available university data."""
         # Generate response using Gemini API
         full_prompt = f"{system_prompt}\n\nStudent Question: {user_message}\n\nYour Response:"
         
-        response = client.models.generate_content(
-            model='gemini-2.0-flash-001',
-            contents=full_prompt
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": full_prompt,
+                }
+            ],
+            model="llama-3.3-70b-versatile",  # Fast and smart model
+            temperature=0.7,
+            max_tokens=1024,
         )
-        
+
         return {
-            "response": response.text,
+            "response": chat_completion.choices[0].message.content,
             "status": "success",
-            "student_id": student_id,  # Return student_id so frontend can track it
+            "student_id": student_id,
             "extracted_info": extracted_info if extracted_info else None
         }
         
