@@ -2,10 +2,10 @@
 
 An intelligent conversational AI system that helps Bangladeshi students navigate the university admission process through personalized guidance and recommendations.
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](YOUR_VERCEL_URL)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://admission-assistant-two.vercel.app/)
 [![Video Demo](https://img.shields.io/badge/Video-Demo-red)](YOUR_VIDEO_LINK)
 
-## 📋 Table of Contents
+##  Table of Contents
 - [Overview](#overview)
 - [Features](#features)
 - [Technology Stack](#technology-stack)
@@ -14,12 +14,10 @@ An intelligent conversational AI system that helps Bangladeshi students navigate
 - [Deployment](#deployment)
 - [Demo](#demo)
 - [Project Structure](#project-structure)
-- [API Endpoints](#api-endpoints)
 - [Challenges & Solutions](#challenges--solutions)
-- [Future Improvements](#future-improvements)
-- [Contributors](#contributors)
 
-## 🌟 Overview
+
+##  Overview
 
 This project implements a web-based AI agent that assists Bangladeshi students with university admission guidance. The system uses conversational AI to:
 - Understand student queries in natural language
@@ -27,11 +25,11 @@ This project implements a web-based AI agent that assists Bangladeshi students w
 - Provide personalized university recommendations
 - Filter universities based on GPA, department, and preferences
 
-**Live Application:** [https://your-app.vercel.app](YOUR_VERCEL_URL)
+**Live Application:** [https://admission-assistant-two.vercel.app/]()
 
 **Demo Video:** [Watch on Google Drive](YOUR_VIDEO_LINK)
 
-## ✨ Features
+##  Features
 
 ### Core Functionality
 - 💬 **Natural Language Chat Interface** - Intuitive conversation flow
@@ -48,7 +46,7 @@ This project implements a web-based AI agent that assists Bangladeshi students w
 - Error handling and validation
 - CORS-enabled for cross-origin requests
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 ### Frontend
 - **Framework:** React.js 18
@@ -70,12 +68,12 @@ This project implements a web-based AI agent that assists Bangladeshi students w
 - Python 3.11
 - Node.js 18+
 
-## 🏗️ System Architecture
+##  System Architecture
 ```
-┌─────────────┐         ┌─────────────┐         ┌─────────────┐
+┌─────────────┐         ┌─────────────┐          ┌─────────────┐
 │   React     │────────▶│   FastAPI   │────────▶│   Groq AI   │
 │  Frontend   │◀────────│   Backend   │◀────────│   (LLM)     │
-└─────────────┘         └─────────────┘         └─────────────┘
+└─────────────┘         └─────────────┘          └─────────────┘
                               │
                               ▼
                         ┌─────────────┐
@@ -93,7 +91,7 @@ This project implements a web-based AI agent that assists Bangladeshi students w
 6. Groq AI generates personalized response
 7. Response is sent back to frontend and displayed
 
-## 📦 Setup Instructions
+##  Setup Instructions
 
 ### Prerequisites
 - Python 3.11+
@@ -145,7 +143,7 @@ npm start
 
 Frontend will run at: `http://localhost:3000`
 
-## 🚀 Deployment
+##  Deployment
 
 ### Backend (Render.com)
 1. Create new Web Service
@@ -163,9 +161,9 @@ Frontend will run at: `http://localhost:3000`
 
 Update `frontend/src/App.js` with production backend URL before deploying.
 
-## 🎥 Demo
+##  Demo
 
-**Live Application:** [https://admission-assistant-xyz.vercel.app](YOUR_VERCEL_URL)
+**Live Application:** [https://admission-assistant-two.vercel.app/](YOUR_VERCEL_URL)
 
 **Video Demonstration:** [Watch on Google Drive](YOUR_VIDEO_LINK)
 
@@ -176,7 +174,7 @@ The demo video includes:
 - Personalized recommendation flow
 - Challenges faced and solutions implemented
 
-## 📁 Project Structure
+##  Project Structure
 ```
 admission-assistant/
 ├── backend/
@@ -197,33 +195,8 @@ admission-assistant/
 └── README.md
 ```
 
-## 🔌 API Endpoints
 
-### `GET /`
-Returns API status and available endpoints
-
-### `POST /chat`
-Main chat endpoint
-```json
-{
-  "message": "I want to study CSE",
-  "student_id": 1  // optional
-}
-```
-
-### `GET /students`
-Returns all stored students
-
-### `GET /students/{id}`
-Returns specific student by ID
-
-### `GET /universities`
-Returns all universities in database
-
-### `POST /save-student`
-Manually save student data
-
-## 🚧 Challenges & Solutions
+##  Challenges & Solutions
 
 ### Challenge 1: API Rate Limiting
 **Problem:** Google Gemini had strict rate limits causing quota errors  
@@ -241,7 +214,7 @@ Manually save student data
 **Problem:** Frontend couldn't connect to backend due to CORS policy  
 **Solution:** Added CORS middleware in FastAPI with appropriate origins
 
-## 🔮 Future Improvements
+##  Future Improvements
 
 - [ ] Expand university database to 50+ institutions
 - [ ] Implement user authentication and sessions
@@ -253,19 +226,12 @@ Manually save student data
 - [ ] Multi-language support (Bengali + English)
 - [ ] Mobile app version
 
-## 👥 Contributors
 
-**Developer:** [Your Name]  
-**Email:** [Your Email]  
-**GitHub:** [@TD-Jit-7](https://github.com/TD-Jit-7)
 
 ---
 
-## 📄 License
 
-This project was created as part of an interview assessment for AI Agent development.
-
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - Groq for providing free AI API access
 - Anthropic's Claude for development assistance
@@ -273,4 +239,4 @@ This project was created as part of an interview assessment for AI Agent develop
 
 ---
 
-**Last Updated:** February 14, 2026
+
