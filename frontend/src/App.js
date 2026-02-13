@@ -1,4 +1,3 @@
-import ReactMarkdown from 'react-markdown';
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './App.css';
@@ -28,19 +27,28 @@ function App() {
 
     // Add user message to chat
     const userMessage = { role: 'user', content: input };
-    setMessages(prev => [...prev, userMessage]);
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
     setInput('');
     setLoading(true);
 
     try {
-      // IMPORTANT: Replace with YOUR Render backend URL
+      // Build conversation history (last 8 messages = 4 exchanges)
+      const conversationHistory = updatedMessages
+        .slice(-8)
+        .map(msg => ({
+          role: msg.role,
+          content: msg.content
+        }));
+
+      // Call backend API with conversation history
       const response = await axios.post('https://admission-assistant-api.onrender.com/chat', {
-        message: input
+        message: input,
+        conversation_history: conversationHistory
       }, {
-        timeout: 60000 // 60 second timeout for Render free tier spin-up
+        timeout: 60000
       });
 
-      // Check if response exists and has data
       if (response && response.data && response.data.response) {
         const aiMessage = {
           role: 'ai',
@@ -97,9 +105,7 @@ function App() {
                 <div className="message-role">
                   {msg.role === 'user' ? 'You' : 'AI Assistant'}
                 </div>
-                <div className="message-text">
-                  <ReactMarkdown>{msg.content}</ReactMarkdown>
-                </div>
+                <div className="message-text">{msg.content}</div>
               </div>
             </div>
           ))}

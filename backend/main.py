@@ -24,7 +24,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configure Google Gemini AI
+# Configure Groq AI
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 client = Groq(api_key=GROQ_API_KEY)
 
@@ -36,6 +36,7 @@ with open('universities.json', 'r', encoding='utf-8') as f:
 class ChatRequest(BaseModel):
     message: str
     student_id: int = None
+    conversation_history: list = []
 
 class StudentData(BaseModel):
     name: str = None
@@ -50,7 +51,7 @@ def extract_student_info(message: str, db: Session):
     """Extract and save student information from user message"""
     student_data = {}
     
-    # Extract GPA (e.g., "my gpa is 4.7", "GPA: 4.5", "I have 4.8")
+    # Extract GPA
     gpa_patterns = [
         r'(?:gpa|GPA|result|score)(?:\s+is|\s*:)?\s*(\d+\.?\d*)',
         r'(?:I have|got|scored)\s+(?:a\s+)?(\d+\.?\d*)\s*(?:gpa|GPA)',
@@ -61,7 +62,7 @@ def extract_student_info(message: str, db: Session):
         if gpa_match:
             try:
                 gpa_value = float(gpa_match.group(1))
-                if 0 <= gpa_value <= 5.0:  # Valid GPA range
+                if 0 <= gpa_value <= 5.0:
                     student_data['gpa'] = gpa_value
                     break
             except ValueError:
@@ -90,7 +91,7 @@ def extract_student_info(message: str, db: Session):
     elif re.search(r'\b(private|Private|PRIVATE)\b', message):
         student_data['preferred_university_type'] = 'Private'
     
-    # Extract name (if they say "my name is..." or "I'm..." or "I am...")
+    # Extract name
     name_patterns = [
         r'(?:my name is|I am|I\'m|call me)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)',
         r'(?:this is|speaking is)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)'
@@ -101,7 +102,7 @@ def extract_student_info(message: str, db: Session):
             student_data['name'] = name_match.group(1).title()
             break
     
-    # If we found any info, save it to database
+    # Save to database if info found
     if student_data:
         try:
             student = Student(**student_data)
@@ -134,15 +135,15 @@ async def root():
     }
 
 
-# Chat endpoint
+# Chat endpoint with conversation history
 @app.post("/chat")
 async def chat(request: ChatRequest, db: Session = Depends(get_db)):
     user_message = request.message
     
-    # Extract and save student information from the message
+    # Extract and save student information
     student_id, extracted_info = extract_student_info(user_message, db)
     
-    # Get student data if student_id is provided or just extracted
+    # Build student context
     student_context = ""
     if request.student_id:
         student = db.query(Student).filter(Student.id == request.student_id).first()
@@ -156,7 +157,6 @@ Student Profile (from database):
 - Preferred University Type: {student.preferred_university_type or 'Not provided'}
 """
     elif extracted_info:
-        # Use the newly extracted info
         info_lines = []
         if 'name' in extracted_info:
             info_lines.append(f"- Name: {extracted_info['name']}")
@@ -177,7 +177,7 @@ Student Information (just provided):
 Note: I have saved this information for future reference.
 """
     
-    # Create system prompt with university data
+    # Create system prompt
     system_prompt = f"""You are a helpful AI admission assistant for Bangladeshi students looking for university guidance.
 
 Available Universities in Bangladesh:
@@ -193,40 +193,63 @@ Your responsibilities:
 5. Be friendly, encouraging, and helpful
 6. Provide specific recommendations with clear reasons
 7. When students provide their information, acknowledge it briefly and use it for personalized recommendations
-8. Format your responses clearly with proper line breaks and structure
+8. Format your responses clearly with proper structure
+9. Remember and reference previous parts of the conversation when answering follow-up questions
 
 Important Guidelines:
 - Only recommend universities where admission_status is "Open"
 - Only recommend universities where the student's GPA meets or exceeds the minimum_gpa requirement
-- If a student asks about a specific department, show ALL universities offering that department (both public and private)
+- If a student asks about a specific department, show ALL universities offering that department
 - If a student specifies public/private preference, filter accordingly
 - Group recommendations by university type (Public/Private)
 - Always mention the minimum GPA requirement for each university
+- When a user asks follow-up questions like "what about X" or "show me Y", understand they're referring to the context of the previous conversation
 
-Response Format Guidelines:
+Response Format:
 - Use clear sections for Public and Private universities
-- List each university with its key details (name, minimum GPA, location if relevant)
+- List each university with its key details
 - Keep responses concise but informative
 - Use natural, conversational language
+- Reference previous conversation when relevant
 
-Answer the student's question based on the available university data."""
+Answer the student's question based on the available university data and conversation context."""
 
     try:
-        # Generate response using Gemini API
-        full_prompt = f"{system_prompt}\n\nStudent Question: {user_message}\n\nYour Response:"
+        # Build messages array with conversation history
+        messages_for_ai = [
+            {
+                "role": "system",
+                "content": system_prompt
+            }
+        ]
         
+        # Add previous conversation history
+        if request.conversation_history and len(request.conversation_history) > 0:
+            for msg in request.conversation_history[:-1]:  # Exclude current message
+                role = msg.get('role', 'user')
+                # Map 'ai' role to 'assistant' for Groq
+                if role == 'ai':
+                    role = 'assistant'
+                
+                messages_for_ai.append({
+                    "role": role,
+                    "content": msg.get('content', '')
+                })
+        
+        # Add current user message
+        messages_for_ai.append({
+            "role": "user",
+            "content": user_message
+        })
+        
+        # Generate response with full conversation context
         chat_completion = client.chat.completions.create(
-            messages=[
-                {
-                    "role": "user",
-                    "content": full_prompt,
-                }
-            ],
-            model="llama-3.3-70b-versatile",  # Fast and smart model
+            messages=messages_for_ai,
+            model="llama-3.3-70b-versatile",
             temperature=0.7,
             max_tokens=1024,
         )
-
+        
         return {
             "response": chat_completion.choices[0].message.content,
             "status": "success",
@@ -238,7 +261,6 @@ Answer the student's question based on the available university data."""
         import traceback
         error_details = traceback.format_exc()
         
-        # Print detailed error to logs
         print("=" * 50)
         print("ERROR IN CHAT ENDPOINT:")
         print(f"Error type: {type(e).__name__}")
@@ -247,16 +269,13 @@ Answer the student's question based on the available university data."""
         print(error_details)
         print("=" * 50)
         
-        # Check for specific errors and provide user-friendly messages
         error_str = str(e).lower()
-        if "429" in error_str or "quota" in error_str or "resource has been exhausted" in error_str:
-            user_message = "⚠️ API quota exceeded. The free tier limit has been reached. Please try again in a few minutes or contact the administrator."
-        elif "404" in error_str or "not found" in error_str:
-            user_message = "⚠️ AI model not found. The model may have been updated. Please contact support."
+        if "429" in error_str or "quota" in error_str or "rate limit" in error_str:
+            user_message = "⚠️ API rate limit reached. Please try again in a moment."
         elif "401" in error_str or "403" in error_str or "invalid" in error_str:
-            user_message = "⚠️ API key is invalid or expired. Please contact the administrator."
+            user_message = "⚠️ API authentication error. Please contact administrator."
         else:
-            user_message = f"⚠️ I encountered a technical error. Please try again. Error: {str(e)[:100]}"
+            user_message = f"⚠️ I encountered an error. Please try again. Error: {str(e)[:100]}"
         
         return {
             "response": user_message,
@@ -269,7 +288,6 @@ Answer the student's question based on the available university data."""
 @app.post("/save-student")
 async def save_student(student_data: StudentData, db: Session = Depends(get_db)):
     try:
-        # Create new student record
         student = Student(
             name=student_data.name,
             academic_group=student_data.academic_group,
@@ -341,7 +359,7 @@ async def get_universities():
     }
 
 
-# Get a specific student by ID
+# Get specific student
 @app.get("/students/{student_id}")
 async def get_student(student_id: int, db: Session = Depends(get_db)):
     try:
