@@ -3,7 +3,7 @@
 An intelligent conversational AI system that helps Bangladeshi students navigate the university admission process through personalized guidance and recommendations.
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://admission-assistant-two.vercel.app/)
-[![Video Demo](https://img.shields.io/badge/Video-Demo-red)](YOUR_VIDEO_LINK)
+[![Video Demo](https://img.shields.io/badge/Video-Demo-red)](https://drive.google.com/file/d/1SphshV8SAkfcdu86iGF1qTvP0npHoJr5/view?usp=sharing)
 
 ##  Table of Contents
 - [Overview](#overview)
@@ -14,7 +14,6 @@ An intelligent conversational AI system that helps Bangladeshi students navigate
 - [Deployment](#deployment)
 - [Demo](#demo)
 - [Project Structure](#project-structure)
-- [Challenges & Solutions](#challenges--solutions)
 
 
 ##  Overview
@@ -25,9 +24,9 @@ This project implements a web-based AI agent that assists Bangladeshi students w
 - Provide personalized university recommendations
 - Filter universities based on GPA, department, and preferences
 
-**Live Application:** [https://admission-assistant-two.vercel.app/]()
+**Live Application:** [https://admission-assistant-two.vercel.app/](https://admission-assistant-two.vercel.app/)
 
-**Demo Video:** [Watch on Google Drive](YOUR_VIDEO_LINK)
+**Demo Video:** [Watch on Google Drive](https://drive.google.com/file/d/1SphshV8SAkfcdu86iGF1qTvP0npHoJr5/view?usp=sharing)
 
 ##  Features
 
@@ -195,40 +194,6 @@ admission-assistant/
 └── README.md
 ```
 
-
-##  Challenges & Solutions
-
-### Challenge 1: API Rate Limiting
-**Problem:** Google Gemini had strict rate limits causing quota errors  
-**Solution:** Switched to Groq AI which offers 14,400 requests/day and faster responses
-
-### Challenge 2: Python Compatibility
-**Problem:** Python 3.13 caused package compatibility issues with SQLAlchemy  
-**Solution:** Created `runtime.txt` to force Python 3.11 on Render
-
-### Challenge 3: API Key Security
-**Problem:** Accidentally committed API key to GitHub  
-**Solution:** Used environment variables and properly configured `.gitignore`
-
-### Challenge 4: CORS Errors
-**Problem:** Frontend couldn't connect to backend due to CORS policy  
-**Solution:** Added CORS middleware in FastAPI with appropriate origins
-
-##  Future Improvements
-
-- [ ] Expand university database to 50+ institutions
-- [ ] Implement user authentication and sessions
-- [ ] Add more sophisticated NLP for data extraction
-- [ ] Real-time admission status updates via web scraping
-- [ ] Export recommendations as PDF
-- [ ] Add university comparison feature
-- [ ] Implement chat history persistence
-- [ ] Multi-language support (Bengali + English)
-- [ ] Mobile app version
-
-
-
----
 
 
 ##  Acknowledgments
